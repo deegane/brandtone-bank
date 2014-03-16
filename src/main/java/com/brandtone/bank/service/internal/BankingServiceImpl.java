@@ -20,7 +20,7 @@ public class BankingServiceImpl implements BankingService  {
 	
 	@Override
 	public Account createAccount(Account account) {
-		log.info("createAccount(account={})", account.getNumber());
+		log.info("createAccount(account={})", account);
 		
 		//TODO: Retreive account from Account Repository
 		return null;

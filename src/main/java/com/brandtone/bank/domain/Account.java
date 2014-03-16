@@ -2,6 +2,12 @@ package com.brandtone.bank.domain;
 
 import java.util.Objects;
 
+import com.google.common.base.Strings;
+import com.google.common.primitives.Doubles;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Account {
 
 	private long id;
@@ -17,6 +23,14 @@ public class Account {
 			String address, 
 			String phone, 
 			double balance) {
+		
+		checkNotNull(id);
+		checkNotNull(number);
+		checkArgument(!Strings.isNullOrEmpty(name), "name is a required parameter");
+		checkArgument(!Strings.isNullOrEmpty(address), "address is a required parameter");
+		checkArgument(!Strings.isNullOrEmpty(phone), "name is a required parameter");
+		checkArgument(Doubles.isFinite(balance), "invalid balance entered");
+		
 		this.id = id;
 		this.number = number;
 		this.name = name;
