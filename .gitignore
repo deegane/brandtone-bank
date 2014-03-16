@@ -1,5 +1,8 @@
 *.class
 
+.classpath
+.project
+
 # Package Files #
 *.jar
 *.war
@@ -7,3 +10,5 @@
 
 # directories #
 target/
+bin/
+.settings/

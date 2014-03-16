@@ -4,20 +4,21 @@ import java.util.Date;
 
 public class Transaction {
 	
-	private Long id;
+	private long id;
 	private String transactionType;
 	private Account fromAccount;
 	private Account toAccount;
 	private double amount;
 	private Date transactionDate;
 	
-	public Transaction(Long id,
+	public Transaction(long id,
 			String transactionType,
 			Account fromAccount,
 			Account toAccount,
 			double amount,
 			Date transactionDate) {
 		
+		this.id = id;
 		this.transactionType = transactionType;
 		this.amount = amount;
 		this.fromAccount = fromAccount;
@@ -25,7 +26,7 @@ public class Transaction {
 		this.transactionDate = new Date();
 	}
 	
-	public Long getId() { return id; }
+	public long getId() { return id; }
 	public Date getTransactionDate() { return transactionDate; }
 	public String getTransactionType() { return transactionType; }
 	public double getAmount() { return amount; }
