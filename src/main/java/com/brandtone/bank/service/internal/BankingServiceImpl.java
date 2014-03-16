@@ -2,7 +2,8 @@ package com.brandtone.bank.service.internal;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.brandtone.bank.domain.Account;
 import com.brandtone.bank.service.BankingService;
@@ -15,14 +16,11 @@ import com.brandtone.bank.service.BankingService;
 
 public class BankingServiceImpl implements BankingService  {
 	
-	//TODO: slf4j not working correctly for unknown reason. Fix later.
-	//private static final Logger log = LoggerFactory.getLogger(BankingServiceImpl.class);
-	
-	private static final Logger log = Logger.getLogger(BankingServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(BankingServiceImpl.class);
 	
 	@Override
 	public Account createAccount(Account account) {
-		log.info("createAccount(account={}) " + account.getNumber());
+		log.info("createAccount(account={})", account.getNumber());
 		
 		//TODO: Retreive account from Account Repository
 		return null;
