@@ -1,5 +1,8 @@
 package com.brandtone.bank.fixtures;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.brandtone.bank.domain.Account;
 
 public class AccountFixtures {
@@ -26,5 +29,17 @@ public class AccountFixtures {
 	
 	public static Account typicalAccountClone() {
 		return AccountFixtures.typicalAccount();
+	}
+	
+	public static List<Account> typicalAccounts() {
+		
+		Account accountOne = Account.newInstance(88, "name", "address", "phone", 20.00);
+		Account accountTwo = Account.newInstance(89, "name", "address", "phone", 40.00);
+		
+		List<Account> typicalAccounts = new ArrayList<>();
+		typicalAccounts.add(accountOne);
+		typicalAccounts.add(accountTwo);
+		
+		return typicalAccounts;		
 	}
 }
