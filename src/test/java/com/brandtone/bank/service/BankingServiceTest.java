@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.AssertThrows;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -25,8 +24,6 @@ import com.brandtone.bank.config.PersistanceConfig;
 import com.brandtone.bank.domain.Account;
 import com.brandtone.bank.domain.Transaction;
 import com.brandtone.bank.fixtures.AccountFixtures;
-import com.brandtone.bank.fixtures.TransactionFixtures;
-import com.brandtone.bank.util.BankingUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CoreConfig.class, PersistanceConfig.class})
