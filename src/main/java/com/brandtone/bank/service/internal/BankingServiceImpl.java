@@ -2,9 +2,11 @@ package com.brandtone.bank.service.internal;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.h2.value.Transfer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,7 @@ public final class BankingServiceImpl implements BankingService  {
 		this.accountRepository = accountRepository;
 		this.transactionRepository = transactionRepository;
 	}
-	
-	
-	
+		
 	/**
 	 * Create a new Account	
 	 * 
@@ -84,8 +84,28 @@ public final class BankingServiceImpl implements BankingService  {
 		return accountRepository.findOne(account.getId());
 	}
 	
+	/**
+	 * Find Account by Account number
+	 * 
+	 * @param account : Account
+	 */
+	@Override
+	public Account findAccountByNumber(final Account account) {
+		log.info("findAccount(accNumber={})", account.getNumber());	
+		return accountRepository.findByAccountNumber(account.getNumber());
+	}
 	
-
+	/**
+	 * Find Account by Account number
+	 * Tra
+	 * @param accountNumber: The account number
+	 */
+	@Override
+	public Account findAccountByNumber(final long accountNumber) {
+		log.info("findAccount(accNumber={})", accountNumber);	
+		return accountRepository.findByAccountNumber(accountNumber);
+	}
+	
 	/**
 	 * Returns all accounts from database
 	 * 
@@ -102,13 +122,20 @@ public final class BankingServiceImpl implements BankingService  {
 	 * @param account : Account
 	 */
 	@Override
-	public Account lodge(final long accountNumber, final double amount) {
-		log.info("lodge( accountNumber={} , amount={} ", accountNumber,amount);
+	public Account lodge(final long accNumber, final double amount) {
+		log.info("lodge( accountNumber={} , amount={} ", accNumber,amount);
 		
-		Account accountToLodge = accountRepository.findOne(accountNumber);
+		Account accountToLodge = accountRepository.findByAccountNumber(accNumber);
 		accountToLodge.lodge(amount);
 		
 		Transaction transfer = Transaction.lodgeTransactionInstance(accountToLodge, amount);
+		transfer.setFromAcc(accountToLodge);
+		
+		// update account transaction set
+		Set<Transaction> transactions = accountToLodge.getTransactions();
+		transactions.add(transfer);
+		accountToLodge.setTransactions(transactions);
+		
 		transactionRepository.save(transfer);
 		
 		return accountRepository.save(accountToLodge);
@@ -121,8 +148,19 @@ public final class BankingServiceImpl implements BankingService  {
 	 */
 	@Override
 	public Account withdraw(final long accountNumber, final double amount) {
-		Account accountToWithDraw = accountRepository.findOne(accountNumber);
-		accountToWithDraw.lodge(amount);
+		
+		Account accountToWithDraw = accountRepository.findByAccountNumber(accountNumber);
+		accountToWithDraw.withdraw(amount);
+		
+		Transaction withdraw = Transaction.withdrawTransactionInstance(accountToWithDraw, amount);
+		withdraw.setFromAcc(accountToWithDraw);
+		
+		// update account transaction set
+		Set<Transaction> transactions = accountToWithDraw.getTransactions();
+		transactions.add(withdraw);
+		accountToWithDraw.setTransactions(transactions);
+		
+		transactionRepository.save(withdraw);
 		
 		return accountRepository.save(accountToWithDraw);
 	}
@@ -143,15 +181,23 @@ public final class BankingServiceImpl implements BankingService  {
 		fromAccount.withdraw(amount);
 		toAccount.lodge(amount);
 		
-		accountRepository.save(fromAccount);
-		accountRepository.save(toAccount);
-		
 		Transaction transfer = Transaction.transferTransactonInstance(amount, fromAccount, toAccount);
 		
-		Transaction saved = transactionRepository.save(transfer);
+		// update account transaction set
+		Set<Transaction> transactions = fromAccount.getTransactions();
+		transactions.add(transfer);
+		fromAccount.setTransactions(transactions);
 		
-		List<Transaction> tx = Lists.newArrayList(transactionRepository.findAll());
-		
+		transfer.setFromAcc(fromAccount);
+		transactionRepository.save(transfer);
+	}
+	
+	/**
+	 * Return All Transactions on System
+	 */
+	@Override
+	public List<Transaction> viewAllTransactions() {
+		return Lists.newArrayList(transactionRepository.findAll());
 	}
 	
 	
@@ -160,17 +206,26 @@ public final class BankingServiceImpl implements BankingService  {
 	 * 
 	 */
 	@Override
-	public List<Transaction> viewTransactions(Date from,
-			Date to) {
+	public Set<Transaction> viewTransactionsByAccount(Account account, Date fromDate,
+			Date toDate) {
 		
-		log.info("getTransactions( from={},  to={}", from, to);
+		log.info("getTransactions( from={}, to={}", fromDate, toDate);
+
+		return account.getTransactions();
+	}
+	
+	/**
+	 * View Transacations for an Account in a given Date range
+	 * 
+	 */
+	@Override
+	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date fromDate,
+			final Date toDate) {
 		
-		//TODO: need to replace query below
-		List<Transaction> transactions = Lists.newArrayList(transactionRepository.findAll());
+		log.info("getTransactions( from={}, to={}", fromDate, toDate);
 		
-		//TODO: Custom query required to search date range	
-		//TODO: need to perform search on an account
+		Account account = accountRepository.findByAccountNumber(accountNumber);
 		
-		return transactions;
+		return account.getTransactions();
 	}
 }

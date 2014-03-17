@@ -10,3 +10,13 @@ CREATE TABLE account
 	phone		varchar(30),
 	balance		number
 );
+
+CREATE TABLE transaction
+(
+	id		LONG IDENTITY PRIMARY KEY,
+	amount		number,
+	fromAccount LONG,
+	toAccount   LONG,
+	transactionType varchar(30),
+	transactionDate		timestamp
+);

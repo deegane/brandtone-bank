@@ -5,10 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import com.google.common.base.Strings;
@@ -38,24 +42,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
 		@GeneratedValue
 		private long id;
 		
+		
+		@Column(nullable = false)
+		private String transactionType;
+		
+		@Column(nullable = false)
+		private double amount;
+			
+		@Column(nullable = true)
+		private long fromAccount;
+		
+		@Column(nullable = true)
+		private long toAccount;
+		
 		@Column(nullable = false)
 		private Date transactionDate;
 		
-		@Column(nullable = false)
-		public String transactionType;
-		
-		@Column(nullable = false)
-		public double amount;
-		
-		@Column(nullable = true)
-		public Account fromAccount;
-		
-		@Column(nullable = true)
-		public Account toAccount;
-		
-		
+		@ManyToOne
+		@JoinColumn(name="account_id")
+	    private Account fromAcc;
+		 	
 		//Used by JPA
 		protected Transaction() {}
+		
 		
 		/**
 		 * Lodge Transaction
@@ -65,7 +74,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 		 * @return Transaction
 		 */
 		public static Transaction lodgeTransactionInstance (final Account userAccount, final double amount) {
-			return new Transaction(Type.LODGE.toString(), amount,userAccount,userAccount);
+			return new Transaction(Type.LODGE.toString(),userAccount, amount,userAccount.getId(),userAccount.getId());
 		}
 		
 		/**
@@ -76,7 +85,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 		 * @return Transaction
 		 */
 		public static Transaction withdrawTransactionInstance (final Account userAccount, final double amount) {
-			return new Transaction(Type.WITHDRAW.toString(),amount,userAccount,userAccount);
+			return new Transaction(Type.WITHDRAW.toString(),userAccount,amount,userAccount.getId(),userAccount.getId());
 		}
 		
 		/**
@@ -89,11 +98,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 		 * @return Transaction
 		 */
 		public static Transaction transferTransactonInstance( final double amount, final Account fromAccount, final Account toAccount) {
-			return new Transaction(Type.TRANSFER.toString(), amount, fromAccount, toAccount );
+			return new Transaction(Type.TRANSFER.toString(),fromAccount, amount, fromAccount.getId(), toAccount.getId() );
 		}
 		
-		private Transaction(final String transactionType,
-				final double amount, final Account fromAccount, final Account toAccount) {
+		private Transaction(final String transactionType,final Account fromAcc,
+				final double amount, final long fromAccount, final long toAccount) {
 			
 			checkArgument(!Strings.isNullOrEmpty(transactionType), "transactionType is a required parameter");
 			checkArgument(Doubles.isFinite(amount),"invalid amount entered");
@@ -101,18 +110,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
 			checkNotNull(toAccount);
 			
 			this.transactionType = transactionType;
+			this.fromAcc = fromAcc;
 			this.amount = amount;
 			this.fromAccount = fromAccount;
 			this.toAccount = toAccount;
 			this.transactionDate = new Date();
+			
 		}
 			
 		public long getId() { return id; }
 		public Date getTransactionDate() { return transactionDate; }
 		public String getTransactionType() { return transactionType; }
 		public double getAmount() { return amount; }
-		public Account getAccountFrom() { return fromAccount; }
-		public Account getAccountTo() {return toAccount; }
+		public long getAccountFrom() { return fromAccount; }
+		public long getAccountTo() {return toAccount; }
+		public Account getFromAcc() { return fromAcc; }
+		
+		public void setFromAcc(Account fromAcc) {
+			this.fromAcc = fromAcc;
+		}
 		
 		
 		@Override

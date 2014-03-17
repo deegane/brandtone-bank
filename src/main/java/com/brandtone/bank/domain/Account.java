@@ -1,23 +1,23 @@
 package com.brandtone.bank.domain;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Doubles;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Entity
 public final class Account
@@ -43,7 +43,10 @@ private static final long serialVersionUID = 5076471619282704273L;
 	
 	@Column(nullable = false)
 	private double balance;
-
+	
+	@OneToMany (mappedBy = "fromAcc")
+    private Set<Transaction> transactions = new HashSet<Transaction>();
+	
 	// Used by JPA
 	protected Account() {}
 	
@@ -89,6 +92,15 @@ private static final long serialVersionUID = 5076471619282704273L;
 	public String getAddress() { return address; }
 	public String getPhone() { return phone; }
 	public double getBalance() { return balance; }
+	
+	public Set<Transaction> getTransactions() { return transactions; }
+	
+	public void setTransactions(Set<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+	
+	
+	
 	
 	@Override
 	public String toString() {

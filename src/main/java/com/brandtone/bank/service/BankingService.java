@@ -2,6 +2,7 @@ package com.brandtone.bank.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.brandtone.bank.domain.Account;
 import com.brandtone.bank.domain.Transaction;
@@ -16,6 +17,10 @@ public interface BankingService {
 	
 	public Account findAccount(final Account account); 
 	
+	public Account findAccountByNumber(final Account accNumber);
+	
+	public Account findAccountByNumber(final long accNumber);
+	
 	public List<Account> findAllAccounts();
 	
 	public Account lodge(final long accountNumber, final double amount);
@@ -24,6 +29,10 @@ public interface BankingService {
 	
 	public void transfer(final Account fromAccount, final Account toAccount, double amount);
 	
-	public List<Transaction> viewTransactions(final Date from, final Date to);
+	public List<Transaction> viewAllTransactions();
+	 
+	public Set<Transaction> viewTransactionsByAccount(final Account account, final Date from, final Date to);
+	
+	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date from, final Date to);
 	
 }
