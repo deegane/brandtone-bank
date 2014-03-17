@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.brandtone.bank.persist.AccountRepository;
+import com.brandtone.bank.persist.TransactionRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,7 +26,7 @@ import java.sql.SQLException;;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.brandtone.bank.persist",
-	includeFilters = @ComponentScan.Filter(value = {AccountRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
+	includeFilters = @ComponentScan.Filter(value = {AccountRepository.class, TransactionRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class PersistanceConfig {
 

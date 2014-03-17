@@ -1,25 +1,29 @@
 package com.brandtone.bank.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.brandtone.bank.domain.Account;
+import com.brandtone.bank.domain.Transaction;
 
 public interface BankingService {
 
-	public Account createAccount(Account account);
+	public Account createAccount(final Account account);
 	
-	public void deleteAccount(Account account);
+	public void deleteAccount(final Account account);
 	
-	public Account findAccount(long number); 
+	public Account findAccount(final long number); 
+	
+	public Account findAccount(final Account account); 
 	
 	public List<Account> findAllAccounts();
 	
-	public Account lodge(long accountNumber, double amount);
+	public Account lodge(final long accountNumber, final double amount);
 	
-	public Account withdraw(long accountNumber, double amount);
+	public Account withdraw(final long accountNumber, final double amount);
 	
-	public void transfer(Account fromAccount, Account toAccount, double amount);
+	public void transfer(final Account fromAccount, final Account toAccount, double amount);
 	
-	//TODO: view transactions
+	public List<Transaction> viewTransactions(final Date from, final Date to);
 	
 }

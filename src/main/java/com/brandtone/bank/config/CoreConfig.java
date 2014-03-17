@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.brandtone.bank.persist.AccountRepository;
+import com.brandtone.bank.persist.TransactionRepository;
 import com.brandtone.bank.service.BankingService;
 import com.brandtone.bank.service.internal.BankingServiceImpl;
 
@@ -11,8 +12,8 @@ import com.brandtone.bank.service.internal.BankingServiceImpl;
 public class CoreConfig {
 		
 	@Bean
-	public BankingService bankingService(AccountRepository accountRepository) {
-		return new BankingServiceImpl(accountRepository);
+	public BankingService bankingService(AccountRepository accountRepository, TransactionRepository transactionRepository) {
+		return new BankingServiceImpl(accountRepository,transactionRepository);
 	}
 	
 }

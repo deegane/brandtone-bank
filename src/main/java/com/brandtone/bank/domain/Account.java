@@ -1,12 +1,17 @@
 package com.brandtone.bank.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 import com.google.common.base.Strings;
 import com.google.common.primitives.Doubles;
@@ -24,7 +29,7 @@ private static final long serialVersionUID = 5076471619282704273L;
 	@GeneratedValue
 	private long id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private long accNumber;
 	
 	@Column(nullable = false)
@@ -41,22 +46,19 @@ private static final long serialVersionUID = 5076471619282704273L;
 
 	// Used by JPA
 	protected Account() {}
+	
+	private Account(final long accNumber, 
+			final String name, 
+			final String address, 
+			final String phone, 
+			final double balance) {
 		
-	public Account(long id,
-			long accNumber, 
-			String name, 
-			String address, 
-			String phone, 
-			double balance) {
-		
-		checkNotNull(id);
 		checkNotNull(accNumber);
 		checkArgument(!Strings.isNullOrEmpty(name), "name is a required parameter");
 		checkArgument(!Strings.isNullOrEmpty(address), "address is a required parameter");
-		checkArgument(!Strings.isNullOrEmpty(phone), "name is a required parameter");
+		checkArgument(!Strings.isNullOrEmpty(phone), "phone is a required parameter");
 		checkArgument(Doubles.isFinite(balance), "invalid balance entered");
 		
-		this.id = id;
 		this.accNumber = accNumber;
 		this.name = name;
 		this.address = address;
@@ -64,11 +66,20 @@ private static final long serialVersionUID = 5076471619282704273L;
 		this.balance = balance;
 	}
 	
+	public static Account newInstance(final long accNumber, 
+			final String name, 
+			final String address, 
+			final String phone, 
+			final double balance) {
+		return new Account(accNumber, name, address, phone, balance);
+	}
+	
 	public void lodge(double amount) {
 		this.balance = balance + amount;
 	}
 	
 	public void withdraw(double amount) {
+		checkArgument(this.balance - amount > 0, "withdraw amount too large for balance:");
 		this.balance = balance - amount;
 	}
 	
@@ -105,7 +116,8 @@ private static final long serialVersionUID = 5076471619282704273L;
 	      
 	      final Account other = (Account) obj;
 	      
-	      return    Objects.equals(this.id, other.id)
+	      return 
+	    		  	Objects.equals(this.accNumber, this.accNumber)
 	    		 && Objects.equals(this.name, other.name)
 	             && Objects.equals(this.address, other.address)
 	             && Objects.equals(this.phone, other.phone)   

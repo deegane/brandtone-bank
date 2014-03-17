@@ -73,10 +73,10 @@ public class BankingServiceTest {
 	@Test
 	public void findAccount() {
 		
-		long accNumber = 1111;
+		long id = 1;
 		
-		Account account = bankingService.findAccount(accNumber);		
-		assertEquals(account.getNumber(), accNumber);
+		Account account = bankingService.findAccount(id);		
+		assertEquals(account.getId(), id);
 	}
 	
 	@Test
@@ -85,8 +85,29 @@ public class BankingServiceTest {
 		Assert.notEmpty(accounts);
 	}
 	
+	/**
+	 * Integration Test (TODO: should really be moved to Integration test class)
+	 */
+	@Test
 	public void transfer() {
-		//TODO
+		Account fromAccount = AccountFixtures.typicalAccount();
+		Account toAccount = AccountFixtures.typicalAccountTwo();
+		
+		double fromAccountStartBalance = fromAccount.getBalance();
+		double toAccountStartBalance = toAccount.getBalance();
+		
+		double transferAmount = 10.00;
+		
+		Account fromAccountSaved = bankingService.createAccount(fromAccount);
+		Account toAccountSaved = bankingService.createAccount(toAccount);
+		
+		bankingService.transfer(fromAccountSaved, toAccountSaved, transferAmount);
+		
+		Account fromAccountUpdated = bankingService.findAccount(fromAccountSaved);
+		Account toAccountUpdated = bankingService.findAccount(toAccountSaved);
+		
+		assertEquals(fromAccountStartBalance, fromAccountUpdated.getBalance() + 10, 0);
+		assertEquals(toAccountStartBalance, toAccountUpdated.getBalance() - 10, 0);
 	}
 	
 	 public void viewtransactions() {
