@@ -14,7 +14,9 @@ public interface BankingService {
 	
 	public List<Account> findAllAccounts();
 	
-	public Account lodge(Long accountNumber, double amount);
+	public Account lodge(long accountNumber, double amount);
+	
+	public Account withdraw(long accountNumber, double amount);
 	
 	public void transfer(Account fromAccount, Account toAccount, double amount);
 	
