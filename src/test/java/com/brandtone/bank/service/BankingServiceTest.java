@@ -127,7 +127,7 @@ public class BankingServiceTest {
 	@Test
 	 public void viewAlltransactions() {
 		
-		 List<Transaction> transactions = bankingService.viewAllTransactions();
+		 Set<Transaction> transactions = bankingService.viewAllTransactions();
 		 assertNotNull(transactions);
 		 
 	 }
@@ -150,7 +150,7 @@ public class BankingServiceTest {
 		 DateTime threeMonths = new DateTime().minusMonths(3);
 		 
 		 Set<Transaction> updatedTransactions  = bankingService.viewTransactionsByAccount(updatedAccount, 
-				 threeMonths.toDate(), new Date());
+				 threeMonths.toDate());
 		 
 		 assertNotNull(updatedTransactions);
 		 

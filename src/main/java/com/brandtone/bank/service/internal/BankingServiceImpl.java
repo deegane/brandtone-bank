@@ -17,7 +17,9 @@ import com.brandtone.bank.domain.Transaction;
 import com.brandtone.bank.persist.AccountRepository;
 import com.brandtone.bank.persist.TransactionRepository;
 import com.brandtone.bank.service.BankingService;
+import com.brandtone.bank.util.BankingUtil;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Implement Banking Service
@@ -196,8 +198,8 @@ public final class BankingServiceImpl implements BankingService  {
 	 * Return All Transactions on System
 	 */
 	@Override
-	public List<Transaction> viewAllTransactions() {
-		return Lists.newArrayList(transactionRepository.findAll());
+	public Set<Transaction> viewAllTransactions() {
+		return Sets.newHashSet(transactionRepository.findAll());
 	}
 	
 	
@@ -206,12 +208,8 @@ public final class BankingServiceImpl implements BankingService  {
 	 * 
 	 */
 	@Override
-	public Set<Transaction> viewTransactionsByAccount(Account account, Date fromDate,
-			Date toDate) {
-		
-		log.info("getTransactions( from={}, to={}", fromDate, toDate);
-
-		return account.getTransactions();
+	public Set<Transaction> viewTransactionsByAccount(Account account, Date searchFrom) {
+		return this.viewTransactionsByAccount(account.getNumber(), searchFrom);
 	}
 	
 	/**
@@ -219,13 +217,20 @@ public final class BankingServiceImpl implements BankingService  {
 	 * 
 	 */
 	@Override
-	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date fromDate,
-			final Date toDate) {
+	public Set<Transaction> viewMiniStatement(Account account) {
 		
-		log.info("getTransactions( from={}, to={}", fromDate, toDate);
+		return this.viewTransactionsByAccount(account.getNumber(),BankingUtil.MINI_STATEMENT_START_DATE );
+	}
+	
+	/**
+	 * View Transacations for an Account in a given Date range
+	 * 
+	 */
+	@Override
+	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date searchFrom) {
 		
-		Account account = accountRepository.findByAccountNumber(accountNumber);
+		log.info("getTransactions( from={}", searchFrom);
 		
-		return account.getTransactions();
+		return transactionRepository.findByDate(accountNumber, searchFrom);
 	}
 }
