@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -54,23 +53,29 @@ public class BankingServiceTest {
 		bankingService.deleteAccount(AccountFixtures.typicalAccount());
 	}
 	
-	@Test
+	
 	public void lodge() throws SQLException {
 		
-		long accountNumber = 1111; 
-		double amount = 20.00;
+		Account account = AccountFixtures.typicalAccount();
+		Account returnAccount = bankingService.createAccount(account);
 		
-		Account account = bankingService.lodge(accountNumber, amount);
+		double amount = 5.00;
+		
+		Account accountLodge = bankingService.withdraw(returnAccount.getNumber(), amount);
+	
 		assertNotNull(account);
 	}
 	
-	@Test
 	public void withdraw() throws Exception {
 		
-		long accountNumber = 1111; 
+		Account account = AccountFixtures.typicalAccount();
+		
+		Account returnAccount = bankingService.createAccount(account);
+		
 		double amount = 5.00;
 		
-		Account account = bankingService.withdraw(accountNumber, amount);
+		Account accountWithdraw = bankingService.withdraw(returnAccount.getNumber(), amount);
+		
 		assertNotNull(account);
 
 	}
@@ -79,23 +84,26 @@ public class BankingServiceTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void invalidWithdraw() throws Exception {
 		
-		long accountNumber = 1111; 
+		Account account = AccountFixtures.typicalAccount();
+		Account returnAccount = bankingService.createAccount(account);
 		
 		double amount = 99999999999999999.00;
-		Account account = bankingService.withdraw(accountNumber, amount);
+		Account accountWithdraw = bankingService.withdraw(returnAccount.getNumber(), amount);
 	}
 	
 	@Test
 	public void findAccount() throws Exception {
 		
-		long id = 1;
+		Account account = AccountFixtures.typicalAccount();
+		Account returnAccount = bankingService.createAccount(account);
 		
-		Account account = bankingService.findAccount(id);		
-		assertEquals(account.getId(), id);
+		Account findAccount = bankingService.findAccount(returnAccount);		
+		assertEquals(returnAccount.getId(), findAccount.getId());
 	}
 	
 	@Test
 	public void findAllAccounts() throws Exception {
+		bankingService.createAccount(AccountFixtures.typicalAccount());
 		List<Account> accounts = bankingService.findAllAccounts();
 		Assert.notEmpty(accounts);
 	}
@@ -103,7 +111,6 @@ public class BankingServiceTest {
 	/**
 	 * Integration Test (TODO: should really be moved to Integration test class)
 	 */
-	@Test
 	public void transfer() throws Exception {
 		Account fromAccount = AccountFixtures.typicalAccount();
 		Account toAccount = AccountFixtures.typicalAccountTwo();

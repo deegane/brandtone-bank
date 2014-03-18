@@ -34,7 +34,7 @@ public class PersistanceConfig {
 	  public DataSource dataSource() throws SQLException {
 
 	    EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-	    return builder.setType(EmbeddedDatabaseType.H2).addDefaultScripts().build();
+	    return builder.setType(EmbeddedDatabaseType.H2).build();
 	  }
 	
 	  @Bean

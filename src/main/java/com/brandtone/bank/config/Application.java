@@ -9,14 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 @EnableAutoConfiguration
 public class Application {
-//
-//	@Autowired
-//	BankingService bankingService;
-//	
-//	public void CLI(){
-//		 Command cmd = new Command();
-//	        cmd.startCLI();
-//	}
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

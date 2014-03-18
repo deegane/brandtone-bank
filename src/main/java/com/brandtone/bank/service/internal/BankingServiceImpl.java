@@ -177,20 +177,7 @@ public final class BankingServiceImpl implements BankingService  {
 	@Override
 	public void transfer(final Account fromAccount, final Account toAccount, double amount) {
 		
-		log.info("Transfer of amount {} from account(id={}) to account(id={})",amount, fromAccount, toAccount);
-		
-		fromAccount.withdraw(amount);
-		toAccount.lodge(amount);
-		
-		Transaction transfer = Transaction.transferTransactonInstance(amount, fromAccount, toAccount);
-		
-		// update account transaction set
-		Set<Transaction> transactions = fromAccount.getTransactions();
-		transactions.add(transfer);
-		fromAccount.setTransactions(transactions);
-		
-		transfer.setFromAcc(fromAccount);
-		transactionRepository.save(transfer);
+		this.transfer(fromAccount.getNumber(), toAccount.getNumber(), amount);
 	}
 	
 	/**
@@ -208,7 +195,7 @@ public final class BankingServiceImpl implements BankingService  {
 		Account fromAccount = findAccountByNumber(fromAccNumber);
 		Account toAccount = findAccountByNumber(toAccountNumber);
 		
-		fromAccount.withdraw(amount);
+	    fromAccount.withdraw(amount);
 		toAccount.lodge(amount);
 		
 		Transaction transfer = Transaction.transferTransactonInstance(amount, fromAccount, toAccount);
@@ -237,7 +224,7 @@ public final class BankingServiceImpl implements BankingService  {
 	 */
 	@Override
 	public Set<Transaction> viewTransactionsByAccount(Account account, Date searchFrom) {
-		return this.viewTransactionsByAccount(account.getNumber(), searchFrom);
+		return transactionRepository.findByDate(account, searchFrom);
 	}
 	
 	/**
@@ -246,53 +233,32 @@ public final class BankingServiceImpl implements BankingService  {
 	 */
 	@Override
 	public Set<Transaction> viewTransactionsByAccount(Account account) {
-		return transactionRepository.findByAccountNumber(account.getNumber());
+		return transactionRepository.findByAccountNumber(account);
 	}
 	
 	/**
-	 * View Mini Statement
+	 * View Transacations for an Account in a given Date range
 	 * 
 	 */
 	@Override
-	public Set<Transaction> viewMiniStatement(Account account) {
-		
-		return this.viewTransactionsByAccount(account.getNumber(),BankingUtil.MINI_STATEMENT_START_DATE );
+	public Set<Transaction> viewTransactionsByAccount(final long accNumber) {
+		Account account = accountRepository.findByAccountNumber(accNumber);
+		return transactionRepository.findByAccountNumber(account);
 	}
 	
-	/**
-	 * View Mini Statement
-	 * 
-	 */
 	@Override
-	public Set<Transaction> viewMiniStatement(long accountNumber) {
-		
-		Account account = accountRepository.findByAccountNumber(accountNumber);
+	public Set<Transaction> viewMiniStatement(final long accNumber) {
+
+		Account account = accountRepository.findByAccountNumber(accNumber);
 		return this.viewMiniStatement(account);
 	}
+
 	
-	/**
-	 * View Transacations for an Account in a given Date range
-	 * 
-	 */
 	@Override
-	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date searchFrom) {
-		
-		log.info("getTransactions( from={}", searchFrom);
-		
-		return transactionRepository.findByDate(accountNumber, searchFrom);
+	public Set<Transaction> viewMiniStatement(final Account account) {
+
+		return transactionRepository.findByDate(account,BankingUtil.MINI_STATEMENT_START_DATE );
 	}
+
 	
-	/**
-	 * View Transacations for an Account in a given Date range
-	 * 
-	 */
-	@Override
-	public Set<Transaction> viewTransactionsByAccount(final long accountNumber) {
-		
-		log.info("getTransactions( from={}");
-		
-		Account account = accountRepository.findByAccountNumber(accountNumber);
-		
-		return account.getTransactions();
-	}
 }

@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.brandtone.bank.cli")
 public class DefaultConfig {
- 
+//enables command line interface configuration 
 }

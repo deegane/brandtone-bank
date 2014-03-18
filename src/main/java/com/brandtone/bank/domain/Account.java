@@ -8,11 +8,15 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import com.google.common.base.Strings;
 import com.google.common.primitives.Doubles;
@@ -42,7 +46,10 @@ private static final long serialVersionUID = 5076471619282704273L;
 	@Column(nullable = false)
 	private double balance;
 	
-	@OneToMany (mappedBy = "fromAcc")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "accs_txs", 
+	 		joinColumns = @JoinColumn(name = "idAcc"), 
+			inverseJoinColumns = @JoinColumn(name = "idTx"))
     private Set<Transaction> transactions = new HashSet<Transaction>();
 	
 	// Used by JPA

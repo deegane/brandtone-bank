@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import com.brandtone.bank.cli.Command;
 import com.brandtone.bank.domain.Transaction;
 import com.brandtone.bank.service.BankingService;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 
 @Component
 public class TransactionMenu {

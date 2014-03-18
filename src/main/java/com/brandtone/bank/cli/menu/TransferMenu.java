@@ -1,7 +1,6 @@
 package com.brandtone.bank.cli.menu;
 
 import java.io.Console;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.brandtone.bank.cli.Command;
-import com.brandtone.bank.domain.Account;
 import com.brandtone.bank.service.BankingService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;

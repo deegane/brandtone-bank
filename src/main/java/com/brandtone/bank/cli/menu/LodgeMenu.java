@@ -1,7 +1,6 @@
 package com.brandtone.bank.cli.menu;
 
 import java.io.Console;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 

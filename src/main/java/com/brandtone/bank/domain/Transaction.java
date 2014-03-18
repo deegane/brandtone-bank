@@ -9,9 +9,11 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 
 import com.google.common.base.Strings;
@@ -54,7 +56,10 @@ import com.google.common.primitives.Doubles;
 		@Column(nullable = false)
 		private Date transactionDate;
 		
-		@ManyToOne
+	    @ManyToOne(fetch = FetchType.EAGER)
+		@JoinTable(	name = "txs_accounts", 
+				joinColumns = @JoinColumn(name = "idTx"), 
+				inverseJoinColumns = @JoinColumn(name = "idAcc"))
 	    private Account fromAcc;
 		 	
 		//Used by JPA

@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import com.brandtone.bank.fixtures.AccountFixtures;
 
+/**
+ * Simple domain object tests
+ * 
+ * @author deegane
+ *
+ */
 public class AccountTest {
 	
 	private static final Logger log = LoggerFactory.getLogger(AccountTest.class);

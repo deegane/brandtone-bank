@@ -6,6 +6,12 @@ import org.junit.Test;
 
 import com.brandtone.bank.fixtures.TransactionFixtures;
 
+/**
+ * Simple domain object test
+ * 
+ * @author deegane
+ *
+ */
 public class TransactionTest {
 	
 	@Test

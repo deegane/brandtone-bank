@@ -36,13 +36,11 @@ public interface BankingService {
 	
 	public Set<Transaction> viewTransactionsByAccount(Account account);
 	
+	public Set<Transaction> viewTransactionsByAccount(long accNumber);
+	
 	public Set<Transaction> viewMiniStatement(final Account account);
 	
 	public Set<Transaction> viewMiniStatement(final long account);
 	 
 	public Set<Transaction> viewTransactionsByAccount(final Account account, final Date searchFrom);
-	
-	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date fromSearchFrom);
-	
-	public Set<Transaction> viewTransactionsByAccount(final long accountNumber);
 }
