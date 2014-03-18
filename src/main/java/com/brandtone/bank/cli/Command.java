@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.brandtone.bank.cli.menu.LodgeMenu;
 import com.brandtone.bank.service.BankingService;
 
 /**
@@ -77,7 +78,8 @@ public class Command implements CommandLineRunner {
 	}
 	
 	private void lodgeMenu() {
-		System.out.println("lodge");
+		LodgeMenu lodgeMenu = new LodgeMenu();
+		lodgeMenu.lodge();
 	}
 	
 	private void transferMenu() {
