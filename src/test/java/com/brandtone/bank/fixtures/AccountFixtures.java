@@ -33,8 +33,8 @@ public class AccountFixtures {
 	
 	public static List<Account> typicalAccounts() {
 		
-		Account accountOne = Account.newInstance(88, "name", "address", "phone", 20.00);
-		Account accountTwo = Account.newInstance(89, "name", "address", "phone", 40.00);
+		Account accountOne = Account.newInstance(88, "fonzie", "address", "phone", 20.00);
+		Account accountTwo = Account.newInstance(89, "richie", "address", "phone", 40.00);
 		
 		List<Account> typicalAccounts = new ArrayList<>();
 		typicalAccounts.add(accountOne);

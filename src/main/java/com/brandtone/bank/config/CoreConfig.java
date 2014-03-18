@@ -15,6 +15,7 @@ public class CoreConfig {
 	public BankingService bankingService(AccountRepository accountRepository, TransactionRepository transactionRepository) {
 		return new BankingServiceImpl(accountRepository,transactionRepository);
 	}
+	 
 	
 }
 	

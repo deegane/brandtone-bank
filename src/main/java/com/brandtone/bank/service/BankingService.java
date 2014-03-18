@@ -13,7 +13,7 @@ public interface BankingService {
 	
 	public void deleteAccount(final Account account);
 	
-	public Account findAccount(final long number); 
+	public Account findAccount(final long id); 
 	
 	public Account findAccount(final Account account); 
 	

@@ -211,6 +211,7 @@ public final class BankingServiceImpl implements BankingService  {
 		return this.viewTransactionsByAccount(account.getNumber(), searchFrom);
 	}
 	
+	
 	/**
 	 * View Transacations for an Account in a given Date range
 	 * 

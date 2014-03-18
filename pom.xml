@@ -25,11 +25,6 @@
   
   
   <dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-  
-  <dependency>
 	  <groupId>org.springframework.boot</groupId>
 	  <artifactId>spring-boot-starter-data-jpa</artifactId>
 	</dependency>
@@ -67,7 +62,27 @@
 		<version>2.3</version>
 	</dependency>
  
+ 
  </dependencies>
+  
+  
+  <profiles>
+    <profile>
+      <id>myProfile</id>
+      <build>
+        <finalName>name</finalName>
+        <resources>
+          <resource>
+            <directory>${basedir}/src/main/resources/menu</directory>
+            <filtering>false</filtering>
+            <includes>
+              <include>*.txt</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
   
   <build>
         <plugins>
