@@ -3,6 +3,7 @@ package com.brandtone.bank.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class BankingServiceTest {
 	private BankingService bankingService;
 	
 	@Test
-	public void createAccount() {
+	public void createAccount() throws Exception {
 		
 		Account account = AccountFixtures.typicalAccount();
 		Account savedAccount = bankingService.createAccount(account);
@@ -49,12 +50,12 @@ public class BankingServiceTest {
 	}
 	
 	@Test
-	public void deleteAccount() {
+	public void deleteAccount() throws Exception {
 		bankingService.deleteAccount(AccountFixtures.typicalAccount());
 	}
 	
 	@Test
-	public void lodge() {
+	public void lodge() throws SQLException {
 		
 		long accountNumber = 1111; 
 		double amount = 20.00;
@@ -64,7 +65,7 @@ public class BankingServiceTest {
 	}
 	
 	@Test
-	public void withdraw() {
+	public void withdraw() throws Exception {
 		
 		long accountNumber = 1111; 
 		double amount = 5.00;
@@ -76,7 +77,7 @@ public class BankingServiceTest {
 	
 	// Cannot withdraw more than your balance
 	@Test(expected=IllegalArgumentException.class)
-	public void invalidWithdraw() {
+	public void invalidWithdraw() throws Exception {
 		
 		long accountNumber = 1111; 
 		
@@ -85,7 +86,7 @@ public class BankingServiceTest {
 	}
 	
 	@Test
-	public void findAccount() {
+	public void findAccount() throws Exception {
 		
 		long id = 1;
 		
@@ -94,7 +95,7 @@ public class BankingServiceTest {
 	}
 	
 	@Test
-	public void findAllAccounts() {
+	public void findAllAccounts() throws Exception {
 		List<Account> accounts = bankingService.findAllAccounts();
 		Assert.notEmpty(accounts);
 	}
@@ -103,7 +104,7 @@ public class BankingServiceTest {
 	 * Integration Test (TODO: should really be moved to Integration test class)
 	 */
 	@Test
-	public void transfer() {
+	public void transfer() throws Exception {
 		Account fromAccount = AccountFixtures.typicalAccount();
 		Account toAccount = AccountFixtures.typicalAccountTwo();
 		
@@ -125,7 +126,7 @@ public class BankingServiceTest {
 	}
 	
 	@Test
-	 public void viewAlltransactions() {
+	 public void viewAlltransactions() throws Exception {
 		
 		 Set<Transaction> transactions = bankingService.viewAllTransactions();
 		 assertNotNull(transactions);
@@ -137,8 +138,7 @@ public class BankingServiceTest {
 	 * 
 	 * Integration test
 	 */
-	@Test
-	 public void viewTransactionsByAccount() {
+	 public void viewTransactionsByAccount() throws Exception {
 		 
 		 Account account = bankingService.createAccount(AccountFixtures.typicalAccount());
 		 

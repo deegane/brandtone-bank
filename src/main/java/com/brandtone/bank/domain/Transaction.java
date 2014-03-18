@@ -55,7 +55,6 @@ import com.google.common.primitives.Doubles;
 		private Date transactionDate;
 		
 		@ManyToOne
-		@JoinColumn(name="account_id")
 	    private Account fromAcc;
 		 	
 		//Used by JPA

@@ -1,6 +1,7 @@
 package com.brandtone.bank.cli.menu;
 
 import java.io.Console;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,18 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.brandtone.bank.cli.Command;
+import com.brandtone.bank.cli.menu.MainMenu.Options;
 import com.brandtone.bank.domain.Account;
 import com.brandtone.bank.service.BankingService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
+/**
+ * Account Menu
+ * 
+ * @author deegane
+ *
+ */
 @Component
 public final class AccountMenu {
 	
-	public final static String LODGE_MENU = new String("Current Accounts on System\n");
+	public final static String ACCOUNT_MENU = new String("Current Accounts on System\n");
 	
-	public final static StringBuilder LODGE_OPTIONS = new StringBuilder("")
-	.append("\n0. Main Menu 1. Create Account");
+	public final static StringBuilder ACCOUNT_OPTIONS = new StringBuilder("")
+	.append("\n0. Main Menu")
+	.append("\n1. Create Account");
 	
 	private Console console = System.console();
 	
@@ -32,7 +41,7 @@ public final class AccountMenu {
 	
 	public enum Options
 	{
-		MAINMENU("0"), CREATE("1");
+		MAINMENU("0"), CREATE("1"), QUIT("q");
 		
 		private String selection;
 		
@@ -50,11 +59,15 @@ public final class AccountMenu {
 	    cmdMap.put(Options.MAINMENU.id(), new Command() {
 	        public void runCommand() { mainMenu.run(); };
 	    });
+	    cmdMap.put(Options.QUIT.id(), new Command() {
+	        public void runCommand() { System.exit(0); };
+	    });
 	}
 	
 	public void run() {
 		
-		System.out.println(LODGE_MENU);
+		System.out.println(ACCOUNT_MENU);
+
 		
 		List<Account> accounts = bankingService.findAllAccounts();
 		
@@ -62,7 +75,7 @@ public final class AccountMenu {
 			System.out.println(acc);
 		}
 		
-		System.out.println(LODGE_OPTIONS);
+		System.out.println(ACCOUNT_OPTIONS);
 		
 		String selection = console.readLine();
 		
@@ -81,6 +94,8 @@ public final class AccountMenu {
 		
 		System.out.println("\nEnter accnumber,name,addresss,phone,balance");
 		System.out.println("Ex: 6666,bob,123st,999,20.00\n");
+		
+		
 		
 		String account = console.readLine();
 		
@@ -103,6 +118,7 @@ public final class AccountMenu {
 		
 		System.out.println("\nNew Account created: " + savedAccount);
 		
-		mainMenu.run();	
+		run();
+		
 	}
 }

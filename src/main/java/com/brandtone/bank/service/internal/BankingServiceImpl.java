@@ -194,6 +194,35 @@ public final class BankingServiceImpl implements BankingService  {
 	}
 	
 	/**
+	 * Transfer amount from one account to another
+	 * 
+	 * @param fromAccount	: Account initiating transfer and account to debit
+	 * @param toAccount		: Account to credit 
+	 * @param amount  		: Amount to transfer
+	 */
+	@Override
+	public void transfer(final long fromAccNumber, final long toAccountNumber, double amount) {
+		
+		log.info("Transfer of amount {} from account(id={}) to account(id={})",amount, fromAccNumber, toAccountNumber);
+		
+		Account fromAccount = findAccountByNumber(fromAccNumber);
+		Account toAccount = findAccountByNumber(toAccountNumber);
+		
+		fromAccount.withdraw(amount);
+		toAccount.lodge(amount);
+		
+		Transaction transfer = Transaction.transferTransactonInstance(amount, fromAccount, toAccount);
+		
+		// update account transaction set
+		Set<Transaction> transactions = fromAccount.getTransactions();
+		transactions.add(transfer);
+		fromAccount.setTransactions(transactions);
+		
+		transfer.setFromAcc(fromAccount);
+		transactionRepository.save(transfer);
+	}
+	
+	/**
 	 * Return All Transactions on System
 	 */
 	@Override
@@ -211,15 +240,34 @@ public final class BankingServiceImpl implements BankingService  {
 		return this.viewTransactionsByAccount(account.getNumber(), searchFrom);
 	}
 	
-	
 	/**
 	 * View Transacations for an Account in a given Date range
+	 * 
+	 */
+	@Override
+	public Set<Transaction> viewTransactionsByAccount(Account account) {
+		return transactionRepository.findByAccountNumber(account.getNumber());
+	}
+	
+	/**
+	 * View Mini Statement
 	 * 
 	 */
 	@Override
 	public Set<Transaction> viewMiniStatement(Account account) {
 		
 		return this.viewTransactionsByAccount(account.getNumber(),BankingUtil.MINI_STATEMENT_START_DATE );
+	}
+	
+	/**
+	 * View Mini Statement
+	 * 
+	 */
+	@Override
+	public Set<Transaction> viewMiniStatement(long accountNumber) {
+		
+		Account account = accountRepository.findByAccountNumber(accountNumber);
+		return this.viewMiniStatement(account);
 	}
 	
 	/**
@@ -232,5 +280,19 @@ public final class BankingServiceImpl implements BankingService  {
 		log.info("getTransactions( from={}", searchFrom);
 		
 		return transactionRepository.findByDate(accountNumber, searchFrom);
+	}
+	
+	/**
+	 * View Transacations for an Account in a given Date range
+	 * 
+	 */
+	@Override
+	public Set<Transaction> viewTransactionsByAccount(final long accountNumber) {
+		
+		log.info("getTransactions( from={}");
+		
+		Account account = accountRepository.findByAccountNumber(accountNumber);
+		
+		return account.getTransactions();
 	}
 }

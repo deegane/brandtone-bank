@@ -1,5 +1,6 @@
 package com.brandtone.bank.service;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -29,12 +30,19 @@ public interface BankingService {
 	
 	public void transfer(final Account fromAccount, final Account toAccount, double amount);
 	
+	public void transfer(final long fromAccount, final long toAccount, double amount);
+	
 	public Set<Transaction> viewAllTransactions();
 	
+	public Set<Transaction> viewTransactionsByAccount(Account account);
+	
 	public Set<Transaction> viewMiniStatement(final Account account);
+	
+	public Set<Transaction> viewMiniStatement(final long account);
 	 
 	public Set<Transaction> viewTransactionsByAccount(final Account account, final Date searchFrom);
 	
 	public Set<Transaction> viewTransactionsByAccount(final long accountNumber, final Date fromSearchFrom);
 	
+	public Set<Transaction> viewTransactionsByAccount(final long accountNumber);
 }
